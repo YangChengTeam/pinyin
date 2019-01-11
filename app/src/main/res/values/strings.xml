@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">小学拼音学习</string>
+    <string name="umeng_id">5bcd726cb465f50926000194</string>
+
+    <string name="bugly_id">6762001ca5</string>
+
+    <string name="current_price">¥ %1$s</string>
+    <string name="origin_price">原价 ¥ %1$s元</string>
+
+    <string name="pref_key_translate">translate</string>
+    <string name="pref_title_translate">翻译</string>
+    <string name="default_hint">No Lyrics</string>
+
+    <!-- 语言 -->
+    <string-array name="language_entries">
+        <item>普通话</item>
+        <item>粤语</item>
+        <item>英语</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>mandarin</item>
+        <item>cantonese</item>
+        <item>en_us</item>
+    </string-array>
+
+    <!-- 标点符号 -->
+    <string-array name="punc_entries">
+        <item>有标点</item>
+        <item>无标点</item>
+    </string-array>
+    <string-array name="punc_values">
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+    <string-array name="dwa_entries">
+        <item>开启</item>
+        <item>关闭</item>
+    </string-array>
+
+    <string name="pref_key_iat_show">iat_show</string>
+    <string name="pref_title_iat_show">显示听写界面</string>
+    <string name="pay_hint_text">购学习保，坚持学习三十天, 每天转发朋友圈，学不会退款!</string>
+
+    <string name="weixin_code_text">关注[说说英语]</string>
+    <string name="weixin_title_text">免费试用,提高英语水平</string>
+</resources>
