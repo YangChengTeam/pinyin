@@ -1,5 +1,6 @@
 package com.yc.phonogram.ui.adapter;
 
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,8 +31,10 @@ public class PayWayInfoAdapter extends BaseQuickAdapter<GoodInfo, BaseViewHolder
 
     @Override
     protected void convert(BaseViewHolder helper, GoodInfo item) {
-        helper.setText(R.id.tv_title, item.getTitle()).setText(R.id.tv_origin_price, String.format(mContext.getString(R.string.origin_price), item.getPrice()))
-                .setText(R.id.tv_current_price, String.format(mContext.getString(R.string.current_price), item.getReal_price()));
+        helper.setText(R.id.tv_title, item.getTitle()).setText(R.id.tv_sub_title, item.getSub_title())
+                .setText(R.id.tv_origin_price, String.format(mContext.getString(R.string.origin_price), item.getPrice()))
+                .setText(R.id.tv_current_price, String.format(mContext.getString(R.string.current_price), item.getReal_price()))
+                .setVisible(R.id.tv_sub_title, !TextUtils.isEmpty(item.getSub_title()));
         Glide.with(mContext).load(item.getIcon()).into((ImageView) helper.getView(R.id.iv_num));
 
         final ImageView imageView = helper.getView(R.id.iv_select);
@@ -39,9 +42,9 @@ public class PayWayInfoAdapter extends BaseQuickAdapter<GoodInfo, BaseViewHolder
         sparseArray.put(position, imageView);
         setIvState(imageView, position);
 //        Logger.i("pay way position--->" + position);
-        if(item.isShow()){
+        if (item.isShow()) {
             imageView.setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             imageView.setVisibility(View.VISIBLE);
         }
     }
@@ -53,7 +56,7 @@ public class PayWayInfoAdapter extends BaseQuickAdapter<GoodInfo, BaseViewHolder
 
 
     private void setIvState(ImageView imageView, int position) {
-        if (MainActivity.getMainActivity().isSuperVip()|| App.isTrial) {
+        if (MainActivity.getMainActivity().isSuperVip() || App.isTrial) {
             imageView.setImageResource(R.mipmap.pay_selected);
             imageView.setTag(true);
             return;
