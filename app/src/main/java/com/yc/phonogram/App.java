@@ -4,8 +4,10 @@ import android.content.Context;
 import android.os.Build;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.Utils;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.kk.securityhttp.domain.GoagalInfo;
@@ -22,7 +24,10 @@ import com.umeng.analytics.MobclickAgent;
 import com.umeng.analytics.game.UMGameAgent;
 import com.umeng.commonsdk.UMConfigure;
 import com.yc.phonogram.domain.Config;
+import com.yc.phonogram.domain.IndexMenuInfo;
+import com.yc.phonogram.domain.IndexMenuInfoWrapper;
 import com.yc.phonogram.domain.LoginDataInfo;
+import com.yc.phonogram.engin.IndexMenuEngine;
 import com.yc.phonogram.engin.LoginEngin;
 import com.yc.phonogram.utils.LPUtils;
 
@@ -40,11 +45,13 @@ import rx.functions.Action1;
 public class App extends MultiDexApplication {
     private static App INSTANSE;
     public static boolean isTrial;//是否是VIP试用一天用户或者关注公众号的用户
+
     @Override
     public void onCreate() {
         super.onCreate();
         Utils.init(this);
         initGoagal(getApplicationContext());
+        getIndexMenu();
         INSTANSE = this;
     }
 
@@ -80,6 +87,7 @@ public class App extends MultiDexApplication {
         //腾迅自动更新
         Bugly.init(context, context.getString(R.string.bugly_id), false);
 
+
         //动态设置渠道信息
 //        String appId_agentId = context.getResources().getString(R.string.app_name) + "-渠道id" + agent_id;
 ////        MobclickAgent.startWithConfigure(new MobclickAgent.UMAnalyticsConfig(context,
@@ -90,7 +98,7 @@ public class App extends MultiDexApplication {
 ////        UMGameAgent.setPlayerLevel(1);
 ////        MobclickAgent.setScenarioType(context, MobclickAgent.EScenarioType.E_UM_NORMAL);
 
-        UMConfigure.init(context, "5bcd726cb465f50926000194", "Umeng", UMConfigure.DEVICE_TYPE_PHONE,null);
+        UMConfigure.init(context, "5bcd726cb465f50926000194", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, null);
 
         KSYHardwareDecodeWhiteList.getInstance().init(context);
         //友盟分享
@@ -170,20 +178,41 @@ public class App extends MultiDexApplication {
 
 
     private HttpProxyCacheServer proxy;
+
     public static HttpProxyCacheServer getProxy() {
         App app = (App) INSTANSE.getApplicationContext();
         return app.proxy == null ? (app.proxy = app.newProxy()) : app.proxy;
     }
 
+    private IndexMenuEngine indexMenuEngine;
+
+    private void getIndexMenu() {
+        if (indexMenuEngine == null) {
+            indexMenuEngine = new IndexMenuEngine(this);
+        }
+        indexMenuEngine.getIndexMenuInfo().subscribe(new Action1<ResultInfo<IndexMenuInfoWrapper>>() {
+            @Override
+            public void call(ResultInfo<IndexMenuInfoWrapper> indexMenuInfoWrapperResultInfo) {
+                if (indexMenuInfoWrapperResultInfo != null && indexMenuInfoWrapperResultInfo.code == HttpConfig.STATUS_OK
+                        && indexMenuInfoWrapperResultInfo.data != null && indexMenuInfoWrapperResultInfo.data.getH5page() != null) {
+                    IndexMenuInfo h5page = indexMenuInfoWrapperResultInfo.data.getH5page();
+                    SPUtils.getInstance().put(Config.INDEX_MENU_URL, JSON.toJSONString(h5page));
+                }
+            }
+        });
+
+    }
+
     /**
      * 构造100M大小的缓存池
+     *
      * @return
      */
     private HttpProxyCacheServer newProxy() {
         int cacheSize = 100 * 1024 * 1024;
         String videoCacheDir = LPUtils.getInstance().getVideoCacheDir(getApplicationContext());
         //如果SD卡已挂载并且可读写
-        if(null==videoCacheDir){
+        if (null == videoCacheDir) {
             return null;
         }
         //优先使用内部缓存

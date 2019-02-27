@@ -10,8 +10,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.Gravity;
+import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -31,6 +35,7 @@ import com.xinqu.videoplayer.XinQuVideoPlayer;
 import com.yc.phonogram.App;
 import com.yc.phonogram.R;
 import com.yc.phonogram.domain.Config;
+import com.yc.phonogram.domain.IndexMenuInfo;
 import com.yc.phonogram.domain.LoginDataInfo;
 import com.yc.phonogram.domain.PhonogramListInfo;
 import com.yc.phonogram.domain.VipInfo;
@@ -65,6 +70,8 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     private ImageView mReadTomeBtn;
     private ImageView mPhonicsBtn;
     private ImageView mShareBtn;
+    private TextView h5Page;
+    private RelativeLayout rlH5Page;
     private static MainActivity INSTANSE;
 
     private int mCurrentIndex = -1;
@@ -105,6 +112,14 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         mReadTomeBtn = findViewById(R.id.iv_read_to_me);
         mPhonicsBtn = findViewById(R.id.iv_phonics);
         mShareBtn = findViewById(R.id.iv_share);
+        h5Page = findViewById(R.id.tv_h5page);
+        rlH5Page = findViewById(R.id.rl_h5page);
+        String indexMenuStr = SPUtils.getInstance().getString(Config.INDEX_MENU_URL);
+        final IndexMenuInfo indexMenuInfo = JSON.parseObject(indexMenuStr, IndexMenuInfo.class);
+        if (indexMenuInfo != null && !TextUtils.isEmpty(indexMenuInfo.getButton_txt())) {
+            h5Page.setText(indexMenuInfo.getButton_txt());
+        }
+
         FragmentAdapter mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mFragmentAdapter);
         mViewPager.setOffscreenPageLimit(4);
@@ -197,6 +212,18 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                 payPopupWindow.show();
             }
         });
+        RxView.clicks(rlH5Page).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                if (indexMenuInfo != null) {
+                    Intent intent = new Intent(MainActivity.this, WebActivity.class);
+                    intent.putExtra("url", indexMenuInfo.getUrl());
+                    intent.putExtra("title", indexMenuInfo.getButton_txt());
+                    startActivity(intent);
+                }
+            }
+        });
+
 
         requestPermission();
 
@@ -345,7 +372,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         new PhonogramEngin(this).getPhonogramList().subscribe(new Action1<ResultInfo<PhonogramListInfo>>() {
             @Override
             public void call(final ResultInfo<PhonogramListInfo> phonogramListInfoResultInfo) {
-                if(phonogramListInfoResultInfo != null){
+                if (phonogramListInfoResultInfo != null) {
                     if (phonogramListInfoResultInfo.code == HttpConfig.STATUS_OK && phonogramListInfoResultInfo.data !=
                             null && phonogramListInfoResultInfo.data.getPhonogramInfos() != null &&
                             phonogramListInfoResultInfo.data.getPhonogramInfos().size() > 0) {
@@ -358,7 +385,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                             }
                         });
                     }
-                }else{
+                } else {
                     ToastUtils.showLong("数据异常,请检查网络后重启应用");
                 }
             }

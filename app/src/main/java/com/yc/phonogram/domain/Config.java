@@ -25,6 +25,8 @@ public class Config {
     public static final String PHONOGRAM_LIST_URL = getBaseUrl() + "index/phonetic_list" + APPID;
     public static final String MCLASS_LIST_URL = getBaseUrl() + "index/phonetic_class" + APPID;
 
+    public static final String INDEX_MENU_URL = getBaseUrl() + "index/menu_adv" + APPID;
+
     public static final String FOLLOW_DATE = "follow_data";
 
     public static String getBaseUrl() {
