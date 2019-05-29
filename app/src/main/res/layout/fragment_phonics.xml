@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true">
-    <com.yc.phonogram.ui.views.MainBgView
+    <com.yc.pinyin.ui.views.MainBgView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true">
@@ -48,12 +48,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1">
-                        <com.yc.phonogram.ui.views.PhoniceSeekBarView
+                        <com.yc.pinyin.ui.views.PhoniceSeekBarView
                             android:id="@+id/phonice_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp">
-                        </com.yc.phonogram.ui.views.PhoniceSeekBarView>
+                        </com.yc.pinyin.ui.views.PhoniceSeekBarView>
                     </RelativeLayout>
                 </LinearLayout>
                 <View
@@ -106,5 +106,5 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </com.yc.phonogram.ui.views.MainBgView>
+    </com.yc.pinyin.ui.views.MainBgView>
 </RelativeLayout>

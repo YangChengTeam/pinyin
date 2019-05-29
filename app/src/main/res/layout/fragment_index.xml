@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.yc.phonogram.ui.views.MainBgView
+    <com.yc.pinyin.ui.views.MainBgView
         android:id="@+id/mainBgView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -37,5 +37,5 @@
                 android:src="@mipmap/index_english_down"
                 android:visibility="gone"/>
         </FrameLayout>
-    </com.yc.phonogram.ui.views.MainBgView>
+    </com.yc.pinyin.ui.views.MainBgView>
 </RelativeLayout>

@@ -3,7 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <com.yc.phonogram.ui.views.MainBgView
+    <com.yc.pinyin.ui.views.MainBgView
         android:id="@+id/mainBgView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,14 +27,14 @@
                     android:layout_gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <com.yc.phonogram.ui.widget.StrokeTextView
+                    <com.yc.pinyin.ui.widget.StrokeTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/read_progress_text"
                         android:textColor="@color/white"
                         android:textSize="20sp"/>
 
-                    <com.yc.phonogram.ui.widget.StrokeTextView
+                    <com.yc.pinyin.ui.widget.StrokeTextView
                         android:id="@+id/tv_current_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -43,14 +43,14 @@
                         android:textColor="@color/white"
                         android:textSize="20sp"/>
 
-                    <com.yc.phonogram.ui.widget.StrokeTextView
+                    <com.yc.pinyin.ui.widget.StrokeTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="/"
                         android:textColor="@color/white"
                         android:textSize="20sp"/>
 
-                    <com.yc.phonogram.ui.widget.StrokeTextView
+                    <com.yc.pinyin.ui.widget.StrokeTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3"
@@ -67,7 +67,7 @@
                     android:gravity="center"
                     android:visibility="invisible">
 
-                    <com.yc.phonogram.ui.widget.StrokeTextView
+                    <com.yc.pinyin.ui.widget.StrokeTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -145,5 +145,5 @@
 
         </LinearLayout>
 
-    </com.yc.phonogram.ui.views.MainBgView>
+    </com.yc.pinyin.ui.views.MainBgView>
 </LinearLayout>

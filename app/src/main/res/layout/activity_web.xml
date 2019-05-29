@@ -56,7 +56,7 @@
         android:minHeight="2dp"
         android:progressDrawable="@drawable/webview_progressbar_drawable" />
 
-    <com.yc.phonogram.ui.widget.CommonWebView
+    <com.yc.pinyin.ui.widget.CommonWebView
         android:id="@+id/commonWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
