@@ -16,4 +16,6 @@
 
     <color name="weixin_color">#7ab939</color>
     <color name="weixin_line_color">#c1c1c1c1</color>
+    <color name="gray_eee">#EEEEEE</color>
+    <color name="orange_fbc927">#FBC927</color>
 </resources>

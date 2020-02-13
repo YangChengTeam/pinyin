@@ -1,17 +1,20 @@
 package com.yc.pinyin.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.yc.pinyin.R;
 import com.yc.pinyin.domain.ExampleInfo;
 import com.yc.pinyin.listener.PerfectClickListener;
 import com.yc.pinyin.ui.views.holder.LearnRecyclerHolder;
 import com.yc.pinyin.utils.LPUtils;
+
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * TinyHung@Outlook.com

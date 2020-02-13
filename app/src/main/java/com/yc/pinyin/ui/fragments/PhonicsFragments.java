@@ -1,8 +1,6 @@
 package com.yc.pinyin.ui.fragments;
 
 import android.graphics.Paint;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -28,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 

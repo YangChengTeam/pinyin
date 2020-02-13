@@ -3,10 +3,7 @@ package com.yc.pinyin.wxapi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
-import com.kk.pay.Config;
-import com.kk.pay.IPayImpl;
 import com.kk.utils.ToastUtil;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
@@ -14,6 +11,10 @@ import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.yc.pinyin.pay.Config;
+import com.yc.pinyin.pay.IPayImpl;
+
+import androidx.annotation.Nullable;
 
 /**
  * Created by wanglin  on 2017/12/22 15:20.

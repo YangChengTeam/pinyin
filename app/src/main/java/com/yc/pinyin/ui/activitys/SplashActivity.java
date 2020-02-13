@@ -2,9 +2,8 @@ package com.yc.pinyin.ui.activitys;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -12,14 +11,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.qq.e.ads.nativ.NativeExpressADView;
 import com.yc.pinyin.R;
 import com.yc.pinyin.domain.Config;
 import com.yc.pinyin.utils.Mp3Utils;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -27,12 +30,14 @@ import rx.functions.Action1;
 import yc.com.tencent_adv.AdvDispatchManager;
 import yc.com.tencent_adv.AdvType;
 import yc.com.tencent_adv.OnAdvStateListener;
+import yc.com.toutiao_adv.TTAdDispatchManager;
+import yc.com.toutiao_adv.TTAdType;
 
 /**
  * Created by zhangkai on 2017/12/15.
  */
 
-public class SplashActivity extends BaseActivity implements OnAdvStateListener {
+public class SplashActivity extends BaseActivity implements OnAdvStateListener, yc.com.toutiao_adv.OnAdvStateListener {
     private Subscription subscription = null;
     private MediaPlayer mediaPlayer;
     public static SplashActivity INSTANCE;
@@ -57,7 +62,11 @@ public class SplashActivity extends BaseActivity implements OnAdvStateListener {
         splashContainer = findViewById(R.id.splash_container);
         reTryLayout = findViewById(R.id.retry_layout);
 
-        AdvDispatchManager.getManager().init(this, AdvType.SPLASH, splashContainer, skipView, Config.AV_APPID, Config.AV_SPLASH_ID,this);
+        if (Build.BRAND.toUpperCase().equals("HUAWEI") || Build.BRAND.toUpperCase().equals("HONOR")) {
+            AdvDispatchManager.getManager().init(this, AdvType.SPLASH, splashContainer, skipView, Config.AV_APPID, Config.AV_SPLASH_ID, this);
+        } else {
+            TTAdDispatchManager.getManager().init(this, TTAdType.SPLASH, splashContainer, Config.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, this);
+        }
         final Integer[] bgIDs = new Integer[]{R.mipmap.splash_bg1, R.mipmap.splash_bg2, R.mipmap.splash_bg3, R.mipmap
                 .splash_bg4};
         subscription = Observable.interval(300, TimeUnit.MILLISECONDS).observeOn
@@ -91,7 +100,11 @@ public class SplashActivity extends BaseActivity implements OnAdvStateListener {
     @Override
     protected void onPause() {
         super.onPause();
-        AdvDispatchManager.getManager().onPause();
+        if (Build.BRAND.toUpperCase().equals("HUAWEI") || Build.BRAND.toUpperCase().equals("HONOR")) {
+            AdvDispatchManager.getManager().onPause();
+        } else {
+            TTAdDispatchManager.getManager().onStop();
+        }
         if (mediaPlayer != null) {
             mediaPlayer.stop();
         }
@@ -101,7 +114,11 @@ public class SplashActivity extends BaseActivity implements OnAdvStateListener {
     @Override
     protected void onResume() {
         super.onResume();
-        AdvDispatchManager.getManager().onResume();
+        if (Build.BRAND.toUpperCase().equals("HUAWEI") || Build.BRAND.toUpperCase().equals("HONOR")) {
+            AdvDispatchManager.getManager().onResume();
+        } else {
+            TTAdDispatchManager.getManager().onResume();
+        }
 //        if (mediaPlayer != null) {
 //            mediaPlayer.start();
 //        }
@@ -182,6 +199,28 @@ public class SplashActivity extends BaseActivity implements OnAdvStateListener {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        AdvDispatchManager.getManager().onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (Build.BRAND.toUpperCase().equals("HUAWEI") || Build.BRAND.toUpperCase().equals("HONOR")) {
+            AdvDispatchManager.getManager().onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    @Override
+    public void loadSuccess() {
+        switchMain(0);
+    }
+
+    @Override
+    public void loadFailed() {
+        switchMain(0);
+    }
+
+    @Override
+    public void clickAD() {
+        switchMain(0);
+    }
+
+    @Override
+    public void onTTNativeExpressed(List<TTNativeExpressAd> ads) {
+
     }
 }

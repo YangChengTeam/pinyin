@@ -2,8 +2,6 @@ package com.yc.pinyin;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -31,8 +29,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.multidex.MultiDex;
+import androidx.multidex.MultiDexApplication;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import yc.com.toutiao_adv.TTAdManagerHolder;
 
 /**
  * Created by zhangkai on 2017/10/17.
@@ -48,6 +49,8 @@ public class App extends MultiDexApplication {
         initGoagal(getApplicationContext());
         getIndexMenu();
         INSTANSE = this;
+
+        TTAdManagerHolder.init(this, Config.TOUTIAO_AD_ID);
     }
 
     public static App getApp() {

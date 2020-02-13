@@ -17,6 +17,7 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.yc.pinyin.App;
 import com.yc.pinyin.R;
+import com.yc.pinyin.domain.LoginDataInfo;
 import com.yc.pinyin.domain.ShareInfo;
 import com.yc.pinyin.ui.activitys.MainActivity;
 
@@ -39,7 +40,9 @@ public class SharePopupWindow extends BasePopupWindow {
     public SharePopupWindow(Activity context) {
         super(context);
         loadingDialog = new LoadingDialog(context);
-        mShareInfo = App.getApp().getLoginDataInfo().getShareInfo();
+        LoginDataInfo loginDataInfo = App.getApp().getLoginDataInfo();
+        if (loginDataInfo != null)
+            mShareInfo = loginDataInfo.getShareInfo();
     }
 
     @Override

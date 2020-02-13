@@ -36,6 +36,11 @@ public class Config {
 
     public static final String AV_SPLASH_ID = "5070254031870826";
 
+    public static final String index_dialog = "index_dialog";
+
+    public static final String TOUTIAO_AD_ID="5044638";
+
+    public static final String TOUTIAO_SPLASH_ID="887291487";
     public static String getBaseUrl() {
         String baseUrl = "http://tic.upkao.com/api/";
         String debugBaseUrl = "http://120.76.202.236:1980/api/";

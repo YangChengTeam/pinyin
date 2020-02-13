@@ -1,11 +1,8 @@
 package com.yc.pinyin.ui.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,13 +16,16 @@ import com.liulishuo.filedownloader.FileDownloader;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.pinyin.App;
 import com.yc.pinyin.R;
+import com.yc.pinyin.domain.Config;
 import com.yc.pinyin.domain.LoginDataInfo;
+import com.yc.pinyin.helper.SharePreferenceUtils;
 import com.yc.pinyin.ui.views.MainBgView;
 import com.yc.pinyin.utils.LPUtils;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import androidx.core.content.FileProvider;
 import rx.functions.Action1;
 
 /**
@@ -37,7 +37,6 @@ public class IndexFragment extends BaseFragment {
 
     private ImageView ivDownEnglish;
 
-    public static final String index_dialog = "index_dialog";
 
     @Override
     public int getLayoutId() {
@@ -50,10 +49,10 @@ public class IndexFragment extends BaseFragment {
         FileDownloader.setup(getActivity());
 
 
-        if (!getBoolean(index_dialog)) {
-            IndexDialogFragment indexDialogFragment = new IndexDialogFragment();
+        if (!SharePreferenceUtils.getInstance().getBoolean(Config.index_dialog)) {
+            final IndexDialogFragment indexDialogFragment = new IndexDialogFragment();
             indexDialogFragment.show(getChildFragmentManager(), "");
-            putBoolean(index_dialog, true);
+
         }
 
         mainBgView = (MainBgView) getView(R.id.mainBgView);
@@ -76,18 +75,6 @@ public class IndexFragment extends BaseFragment {
         });
     }
 
-    private SharedPreferences get() {
-        return getActivity().getSharedPreferences("pinyin", Context.MODE_PRIVATE);
-    }
-
-
-    private void putBoolean(String key, boolean b) {
-        get().edit().putBoolean(key, b).apply();
-    }
-
-    private boolean getBoolean(String key) {
-        return get().getBoolean(key, false);
-    }
 
     @Override
     public void loadData() {

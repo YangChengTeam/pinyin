@@ -3,9 +3,6 @@ package com.yc.pinyin.ui.popupwindow;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Rect;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
@@ -14,11 +11,6 @@ import android.widget.ImageView;
 import com.alibaba.fastjson.JSON;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jakewharton.rxbinding.view.RxView;
-import com.kk.pay.I1PayAbs;
-import com.kk.pay.IPayAbs;
-import com.kk.pay.IPayCallback;
-import com.kk.pay.OrderInfo;
-import com.kk.pay.OrderParamsInfo;
 import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.kk.utils.LogUtil;
@@ -31,12 +23,20 @@ import com.yc.pinyin.domain.Config;
 import com.yc.pinyin.domain.GoodInfo;
 import com.yc.pinyin.domain.GoodListInfo;
 import com.yc.pinyin.engin.GoodEngin;
+import com.yc.pinyin.pay.I1PayAbs;
+import com.yc.pinyin.pay.IPayAbs;
+import com.yc.pinyin.pay.IPayCallback;
+import com.yc.pinyin.pay.OrderInfo;
+import com.yc.pinyin.pay.OrderParamsInfo;
 import com.yc.pinyin.ui.activitys.MainActivity;
 import com.yc.pinyin.ui.adapter.PayWayInfoAdapter;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import rx.functions.Action1;
 
 /**

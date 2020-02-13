@@ -126,12 +126,12 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <android.support.v4.view.ViewPager
+                    <androidx.viewpager.widget.ViewPager
                         android:id="@+id/view_pager"
                         android:layout_width="232dp"
                         android:layout_height="132dp"
                         android:layout_gravity="center">
-                    </android.support.v4.view.ViewPager>
+                    </androidx.viewpager.widget.ViewPager>
 
                     <ImageView
                         android:id="@+id/iv_read_play"

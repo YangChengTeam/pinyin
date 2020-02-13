@@ -12,6 +12,8 @@ import com.xinqu.videoplayer.util.XinQuUtils;
 
 import java.util.Timer;
 
+import androidx.appcompat.app.AlertDialog;
+
 /**
  * TinyHung@outlook.com
  * 2017/11/9
@@ -27,7 +29,7 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
     public ImageView thumbImageView;
 
 
-    public interface  OnPlayStateListener{
+    public interface OnPlayStateListener {
         void onError();
     }
 
@@ -38,11 +40,15 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
     }
 
     //将进度条传给外界设置
-    public interface OnVideoPlayerProgressListener{
+    public interface OnVideoPlayerProgressListener {
         void onTouchProgress(int progress);
+
         void onStateAutoComplete(int progress);
+
         void onProgressAndText(int progress);
+
         void onBufferProgress(int progress);
+
         void onProgressAndTime(int progress);
     }
 
@@ -65,8 +71,8 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
         super.init(context);
         loadingProgressBar = (ProgressBar) findViewById(R.id.loading);
         mBtn_play = (ImageView) findViewById(R.id.btn_play);
-        thumbImageView=((ImageView) findViewById(R.id.thumb));
-        if(null!=textureViewContainer){
+        thumbImageView = ((ImageView) findViewById(R.id.thumb));
+        if (null != textureViewContainer) {
             textureViewContainer.setOnClickListener(null);
             textureViewContainer.setOnTouchListener(null);
         }
@@ -74,13 +80,14 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
 
     /**
      * 全屏，正常，小窗口
+     *
      * @param url
      * @param screen
      * @param objects
      */
     @Override
-    public void setUp(String url, int screen, boolean loop,Object... objects) {
-        super.setUp(url, screen,loop, objects);
+    public void setUp(String url, int screen, boolean loop, Object... objects) {
+        super.setUp(url, screen, loop, objects);
         if (objects.length == 0) return;
         if (currentScreen == SCREEN_WINDOW_TINY) {
             setAllControlsVisible(INVISIBLE, INVISIBLE, INVISIBLE, INVISIBLE, INVISIBLE, INVISIBLE, INVISIBLE);
@@ -88,12 +95,10 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
     }
 
 
-
     @Override
     public int getLayoutId() {
         return R.layout.layout_music_standard;
     }
-
 
 
     @Override
@@ -128,7 +133,7 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
     public void onStateError() {
         super.onStateError();
         changeUiToError();
-        if(null!=mOnPlayStateListener){
+        if (null != mOnPlayStateListener) {
             mOnPlayStateListener.onError();
         }
     }
@@ -139,7 +144,7 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
         super.onStateAutoComplete();
         changeUiToCompleteShow();
         cancelDismissControlViewTimer();
-        if(null!=mOnVideoPlayerProgressListener){
+        if (null != mOnVideoPlayerProgressListener) {
             mOnVideoPlayerProgressListener.onStateAutoComplete(100);
         }
     }
@@ -148,9 +153,9 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
     @Override
     public void showWifiDialog(int action) {
         super.showWifiDialog(action);
-        if(!isWifiTips) return;
-        try{
-            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext());
+        if (!isWifiTips) return;
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage(getResources().getString(R.string.tips_not_wifi));
             builder.setPositiveButton(getResources().getString(R.string.tips_not_wifi_confirm), new DialogInterface.OnClickListener() {
                 @Override
@@ -184,7 +189,7 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
                 }
             });
             builder.create().show();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -202,8 +207,8 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
     @Override
     public void setBufferProgress(int bufferProgress) {
         super.setBufferProgress(bufferProgress);
-        if (bufferProgress != 0){
-            if(null!=mOnVideoPlayerProgressListener){
+        if (bufferProgress != 0) {
+            if (null != mOnVideoPlayerProgressListener) {
                 mOnVideoPlayerProgressListener.onBufferProgress(bufferProgress);
             }
         }
@@ -212,7 +217,7 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
     @Override
     public void resetProgressAndTime() {
         super.resetProgressAndTime();
-        if(null!=mOnVideoPlayerProgressListener){
+        if (null != mOnVideoPlayerProgressListener) {
             mOnVideoPlayerProgressListener.onProgressAndTime(0);
         }
     }
@@ -272,7 +277,7 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
     @Override
     protected void startPlayer() {
         super.startPlayer();
-        if(null!=mBtn_play){
+        if (null != mBtn_play) {
             mBtn_play.setImageResource(R.drawable.media_record_music_pause);
         }
     }
@@ -302,7 +307,6 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
         }
 
     }
-
 
 
     public void changeUiToPauseShow() {
@@ -378,14 +382,13 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
 
     public void setAllControlsVisible(int topCon, int bottomCon, int startBtn, int loadingPro, int thumbImg, int coverImg, int bottomPro) {
         loadingProgressBar.setVisibility(loadingPro);
-        mBtn_play.setVisibility(INVISIBLE ==loadingPro? VISIBLE : INVISIBLE);
-        if(VISIBLE==coverImg){
+        mBtn_play.setVisibility(INVISIBLE == loadingPro ? VISIBLE : INVISIBLE);
+        if (VISIBLE == coverImg) {
             mBtn_play.setImageResource(R.drawable.media_record_music_play);
-        }else{
+        } else {
             mBtn_play.setImageResource(R.drawable.media_record_music_pause);
         }
     }
-
 
 
     @Override
@@ -426,7 +429,7 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
     public void onAutoCompletion() {
         super.onAutoCompletion();
         cancelDismissControlViewTimer();
-        if(null!=mBtn_play){
+        if (null != mBtn_play) {
             mBtn_play.setImageResource(R.drawable.media_record_music_play);
         }
     }
@@ -435,7 +438,7 @@ public class XinQuMusicPlayerStandard extends WindowVideoPlayer {
     public void onCompletion() {
         super.onCompletion();
         cancelDismissControlViewTimer();
-        if(null!=mBtn_play){
+        if (null != mBtn_play) {
             mBtn_play.setImageResource(R.drawable.media_record_music_play);
         }
     }

@@ -1,7 +1,8 @@
 package com.yc.pinyin.ui.views.layout;
 
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
+
+import androidx.recyclerview.widget.GridLayoutManager;
 
 /**
  * TinyHung@Outlook.com
@@ -12,7 +13,7 @@ import android.support.v7.widget.GridLayoutManager;
 public class NoScrollingGridLayoutManager extends GridLayoutManager {
 
     public NoScrollingGridLayoutManager(Context context, int spanCount, int orientation, boolean reverseLayout) {
-        super(context,spanCount,orientation,reverseLayout);
+        super(context, spanCount, orientation, reverseLayout);
     }
 
     @Override

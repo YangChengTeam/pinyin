@@ -3,10 +3,10 @@ package com.yc.pinyin.engin;
 import android.content.Context;
 
 import com.alibaba.fastjson.TypeReference;
-import com.kk.pay.OrderInfo;
 import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.engin.BaseEngin;
 import com.yc.pinyin.domain.Config;
+import com.yc.pinyin.pay.OrderInfo;
 
 import java.util.HashMap;
 import java.util.Map;

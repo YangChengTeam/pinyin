@@ -2,10 +2,12 @@ package com.yc.pinyin.ui.activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+
 import com.yc.pinyin.ui.IView;
 import com.yc.pinyin.utils.UIUtils;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by zhangkai on 2017/10/31.

@@ -10,10 +10,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.widget.Toast;
 
 import com.kk.utils.ToastUtil;
+
+import androidx.annotation.RequiresApi;
 
 /**
  * Created by zhangkai on 2017/10/25.

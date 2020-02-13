@@ -11,5 +11,7 @@
     <dimen name="dp_30">30dp</dimen>
     <dimen name="status_bar_height">0dp</dimen>
     <dimen name="t20sp">20sp</dimen>
+    <dimen name="dp_15">15dp</dimen>
+    <dimen name="dp_50">50dp</dimen>
 
 </resources>

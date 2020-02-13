@@ -3,9 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/pay/pay.iml" filepath="$PROJECT_DIR$/pay/pay.iml" />
       <module fileurl="file://$PROJECT_DIR$/pinyin.iml" filepath="$PROJECT_DIR$/pinyin.iml" />
       <module fileurl="file://$PROJECT_DIR$/share/share.iml" filepath="$PROJECT_DIR$/share/share.iml" />
+      <module fileurl="file://$PROJECT_DIR$/toutiao-adv/toutiao-adv.iml" filepath="$PROJECT_DIR$/toutiao-adv/toutiao-adv.iml" />
       <module fileurl="file://$PROJECT_DIR$/video-player/video-player.iml" filepath="$PROJECT_DIR$/video-player/video-player.iml" />
     </modules>
   </component>
