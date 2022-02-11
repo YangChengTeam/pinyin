@@ -6,12 +6,11 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.yc.pinyin"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 28
 
-
-        versionCode 38
-        versionName "2.2.0"
+        versionCode 49
+        versionName "3.3.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -19,6 +18,7 @@ android {
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "x86"
         }
+        manifestPlaceholders = [qqappid: "1106261461"]
     }
     buildTypes {
         release {
@@ -48,6 +48,10 @@ android {
             keyPassword "123456"
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 repositories {
@@ -62,13 +66,15 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation project(path: ':rthttplibrary')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
     implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     implementation 'com.tencent.bugly:nativecrashreport:latest.release'
-    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
-    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
+//    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
+//    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
     implementation 'com.jakewharton.rxbinding:rxbinding:+'
     implementation 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:+'
     implementation 'com.jakewharton.rxbinding:rxbinding-design:+'
@@ -79,17 +85,17 @@ dependencies {
     implementation project(':video-player')
     implementation project(':share')
     implementation 'com.blankj:utilcode:1.12.0'
-    implementation 'com.umeng.umsdk:analytics:7.5.4'
-    implementation 'com.umeng.umsdk:common:1.5.4'
+//    implementation 'com.umeng.umsdk:analytics:7.5.4'
+//    implementation 'com.umeng.umsdk:common:1.5.4'
     implementation 'com.liulishuo.filedownloader:library:1.7.5'
     implementation 'com.wl.tencent-adv:tencent-adv:7.0'
     // 添加下面的内容
     implementation(name: 'alipaySdk-15.6.5-20190718211159-noUtdid', ext: 'aar')
-    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+//    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     //    implementation project(':tencent-adv')
     implementation files('libs/wftsdk5.0.jar')
     implementation files('libs/XJPay.jar')
-    api 'com.kk:securityhttp:1.1.3'
+
     implementation 'com.kk:loading:1.0.2'
     implementation 'com.afollestad.material-dialogs:core:0.9.0.2@aar'
     implementation project(path: ':toutiao-adv')

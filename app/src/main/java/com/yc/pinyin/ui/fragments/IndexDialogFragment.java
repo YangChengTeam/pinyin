@@ -16,11 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding.view.RxView;
-import com.kk.utils.ScreenUtil;
-import com.kk.utils.ToastUtil;
+
+import com.yc.pinyin.App;
 import com.yc.pinyin.R;
 import com.yc.pinyin.domain.Config;
 import com.yc.pinyin.helper.SharePreferenceUtils;
+import com.yc.pinyin.ui.popupwindow.IndexNoticeWindow;
 
 import java.util.concurrent.TimeUnit;
 
@@ -28,6 +29,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import rx.functions.Action1;
+import yc.com.rthttplibrary.util.ScreenUtil;
+import yc.com.rthttplibrary.util.ToastUtil;
 
 /**
  * Created by wanglin  on 2019/4/12 14:40.
@@ -84,6 +87,7 @@ public class IndexDialogFragment extends DialogFragment {
 
     protected void initView() {
         ImageView view = (ImageView) getView(R.id.iv_close);
+        ((TextView) getView(R.id.tv_privacy)).setText(App.privacyPolicy);
 
         CheckBox cb = (CheckBox) getView(R.id.cb_privacy);
         final TextView tvEnterApp = (TextView) getView(R.id.tv_enter_app);
@@ -106,12 +110,14 @@ public class IndexDialogFragment extends DialogFragment {
                 if (mChecked) {
                     SharePreferenceUtils.getInstance().putBoolean(Config.index_dialog, true);
 //                    if (dismissListener!=null) dismissListener.onDismiss();
-                    PromotionDialogFragment promotionDialogFragment = new PromotionDialogFragment();
-                    if (getActivity() != null)
-                        promotionDialogFragment.show(getActivity().getSupportFragmentManager(), "");
+//                    PromotionDialogFragment promotionDialogFragment = new PromotionDialogFragment();
+//                    if (getActivity() != null)
+//                        promotionDialogFragment.show(getActivity().getSupportFragmentManager(), "");
+                    IndexNoticeWindow indexNoticeWindow = new IndexNoticeWindow(getActivity());
+                    indexNoticeWindow.show();
                     dismiss();
                 } else {
-                    ToastUtil.toast2(getActivity(), "请先同意用户协议");
+                    ToastUtil.toast(getActivity(), "请先同意用户协议");
                 }
             }
         });

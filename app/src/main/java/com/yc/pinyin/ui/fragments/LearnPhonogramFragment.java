@@ -10,6 +10,7 @@ import com.yc.pinyin.R;
 import com.yc.pinyin.domain.PhonogramInfo;
 import com.yc.pinyin.domain.PhonogramListInfo;
 import com.yc.pinyin.helper.SeekBarHelper;
+import com.yc.pinyin.helper.UserInfoHelper;
 import com.yc.pinyin.ui.activitys.MainActivity;
 import com.yc.pinyin.ui.pager.LearnVideoPager;
 import com.yc.pinyin.ui.popupwindow.PayPopupWindow;
@@ -83,17 +84,21 @@ public class LearnPhonogramFragment extends BaseFragment {
                     if (!App.isTrial) {
                         mMainBgView.setIndex(oldCureenIndex);
                         mViewPager.setCurrentItem(oldCureenIndex, false);
-                        PayPopupWindow payPopupWindow = new PayPopupWindow(getActivity());
+                        if (UserInfoHelper.isLogin(getActivity())) {
+                            PayPopupWindow payPopupWindow = new PayPopupWindow(getActivity());
 //                        payPopupWindow.setTimeListener(MainActivity.getMainActivity());
-                        payPopupWindow.show(getActivity().getWindow().getDecorView(), Gravity.CENTER);
+                            payPopupWindow.show(getActivity().getWindow().getDecorView(), Gravity.CENTER);
+                        }
                         return;
                     }
 
                     if (position >= 8 && !MainActivity.getMainActivity().isPhonogramVip()) {
                         mMainBgView.setIndex(oldCureenIndex);
                         mViewPager.setCurrentItem(oldCureenIndex, false);
-                        PayPopupWindow payPopupWindow = new PayPopupWindow(getActivity());
-                        payPopupWindow.show(getActivity().getWindow().getDecorView(), Gravity.CENTER);
+                        if (UserInfoHelper.isLogin(getActivity())) {
+                            PayPopupWindow payPopupWindow = new PayPopupWindow(getActivity());
+                            payPopupWindow.show(getActivity().getWindow().getDecorView(), Gravity.CENTER);
+                        }
                         return;
                     }
                 }
@@ -111,9 +116,7 @@ public class LearnPhonogramFragment extends BaseFragment {
 
         mViewPager.setOffscreenPageLimit(1);
         mViewPager.setAdapter(mLearnPagerAdapter);
-        mMainBgView.setIndexListener(new SeekBarHelper.IndexListener()
-
-        {
+        mMainBgView.setIndexListener(new SeekBarHelper.IndexListener() {
             @Override
             public void leftClick(int position) {
                 if (null != mViewPager && mViewPager.getChildCount() > 0) {

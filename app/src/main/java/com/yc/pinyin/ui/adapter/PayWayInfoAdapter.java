@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.orhanobut.logger.Logger;
 import com.yc.pinyin.App;
 import com.yc.pinyin.R;
 import com.yc.pinyin.domain.GoodInfo;

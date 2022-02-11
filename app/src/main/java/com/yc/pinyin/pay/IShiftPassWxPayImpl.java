@@ -2,8 +2,7 @@ package com.yc.pinyin.pay;
 
 import android.app.Activity;
 
-import com.kk.utils.LogUtil;
-import com.kk.utils.ToastUtil;
+
 import com.switfpass.pay.thread.NetHelper;
 import com.switfpass.pay.utils.MD5;
 import com.switfpass.pay.utils.SignUtils;
@@ -13,6 +12,9 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import yc.com.rthttplibrary.util.LogUtil;
+import yc.com.rthttplibrary.util.ToastUtil;
 
 /**
  * Created by zhangkai on 2017/6/26.
@@ -29,7 +31,7 @@ public class IShiftPassWxPayImpl extends IPayImpl {
     @Override
     public void pay(final OrderInfo orderInfo, final IPayCallback iPayCallback) {
         if (orderInfo == null || orderInfo.getPayInfo() == null) {
-            ToastUtil.toast2(mContext, "支付失败");
+            ToastUtil.toast(mContext, "支付失败");
             return;
         }
 
@@ -78,7 +80,7 @@ public class IShiftPassWxPayImpl extends IPayImpl {
                                 mContext.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        ToastUtil.toast2(mContext, "支付渠道出错,请联系客服");
+                                        ToastUtil.toast(mContext, "支付渠道出错,请联系客服");
                                     }
                                 });
                                 LogUtil.msg("Exception  " + e.getMessage());
@@ -89,7 +91,7 @@ public class IShiftPassWxPayImpl extends IPayImpl {
                     mContext.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ToastUtil.toast2(mContext, "支付渠道出错,请联系客服");
+                            ToastUtil.toast(mContext, "支付渠道出错,请联系客服");
                         }
                     });
                 }

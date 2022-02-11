@@ -1,5 +1,7 @@
 package com.yc.pinyin.ui.activitys;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +37,14 @@ public class WebActivity extends AppCompatActivity {
 
     private String url = "http://en.upkao.com/";
 
+    public static void startActivity(Context context, String url, String title) {
+        Intent intent = new Intent(context, WebActivity.class);
+        intent.putExtra("url", url);
+        intent.putExtra("title", title);
+        context.startActivity(intent);
+
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +54,9 @@ public class WebActivity extends AppCompatActivity {
 
 
     public void init() {
+        url = getIntent().getStringExtra("url");
+        String title = getIntent().getStringExtra("title");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -56,9 +69,7 @@ public class WebActivity extends AppCompatActivity {
         commonWebView = findViewById(R.id.commonWebView);
         rlBack = findViewById(R.id.rl_back);
         TextView tvTitle = findViewById(R.id.tv_tb_title);
-        url = getIntent().getStringExtra("url");
 
-        String title = getIntent().getStringExtra("title");
         tvTitle.setText(title);
         commonWebView.setWebChromeClient(new WebChromeClient() {
             @Override

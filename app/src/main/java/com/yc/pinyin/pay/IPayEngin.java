@@ -2,9 +2,9 @@ package com.yc.pinyin.pay;
 
 import android.content.Context;
 
-import com.kk.securityhttp.domain.ResultInfo;
+import io.reactivex.Observable;
+import yc.com.rthttplibrary.bean.ResultInfo;
 
-import rx.Observable;
 
 /**
  * Created by zhangkai on 2017/4/14.

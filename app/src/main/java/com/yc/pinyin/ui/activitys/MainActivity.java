@@ -5,19 +5,16 @@ import android.content.Intent;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.jakewharton.rxbinding.view.RxView;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
-import com.kk.utils.LogUtil;
-import com.kk.utils.PreferenceUtil;
-import com.kk.utils.TaskUtil;
-import com.kk.utils.ToastUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
 import com.xinqu.videoplayer.XinQuVideoPlayer;
@@ -25,16 +22,20 @@ import com.yc.pinyin.App;
 import com.yc.pinyin.R;
 import com.yc.pinyin.domain.Config;
 import com.yc.pinyin.domain.IndexMenuInfo;
-import com.yc.pinyin.domain.LoginDataInfo;
 import com.yc.pinyin.domain.PhonogramListInfo;
 import com.yc.pinyin.domain.VipInfo;
-import com.yc.pinyin.engin.PhonogramEngin;
+import com.yc.pinyin.engin.PhonographEngine;
+import com.yc.pinyin.helper.SharePreferenceUtils;
+import com.yc.pinyin.helper.UserInfoHelper;
+import com.yc.pinyin.observer.BaseCommonObserver;
+import com.yc.pinyin.ui.fragments.IndexDialogFragment;
 import com.yc.pinyin.ui.fragments.IndexFragment;
 import com.yc.pinyin.ui.fragments.LearnPhonogramFragment;
+import com.yc.pinyin.ui.fragments.PersonCenterFragment;
 import com.yc.pinyin.ui.fragments.PhonicsFragments;
+import com.yc.pinyin.ui.fragments.PolicyTintFragment;
 import com.yc.pinyin.ui.fragments.ReadToMeFragment;
 import com.yc.pinyin.ui.popupwindow.LogoutPopupWindow;
-import com.yc.pinyin.ui.popupwindow.PayPopupWindow;
 import com.yc.pinyin.ui.popupwindow.PhonogramPopupWindow;
 import com.yc.pinyin.ui.popupwindow.SharePopupWindow;
 import com.yc.pinyin.utils.CommonUtils;
@@ -49,13 +50,22 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
+
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import rx.functions.Action1;
+import yc.com.rthttplibrary.util.LogUtil;
+import yc.com.rthttplibrary.util.PreferenceUtil;
+import yc.com.rthttplibrary.util.TaskUtil;
+import yc.com.rthttplibrary.util.ToastUtil;
+import yc.com.toutiao_adv.OnAdvStateListener;
+import yc.com.toutiao_adv.TTAdDispatchManager;
+import yc.com.toutiao_adv.TTAdType;
 
 
-public class MainActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
+public class MainActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks, OnAdvStateListener {
 
     private static final String TAG = "MainActivity";
 
@@ -68,6 +78,8 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     private TextView h5Page;
     private RelativeLayout rlH5Page;
     private static MainActivity INSTANSE;
+    private FrameLayout mainContainer;
+    private FrameLayout bottomContainer;
 
     private int mCurrentIndex = -1;
 
@@ -109,10 +121,28 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         mShareBtn = findViewById(R.id.iv_share);
         h5Page = findViewById(R.id.tv_h5page);
         rlH5Page = findViewById(R.id.rl_h5page);
+        mainContainer = findViewById(R.id.main_container);
+        bottomContainer = findViewById(R.id.bottom_container);
+        PersonCenterFragment centerFragment = new PersonCenterFragment();
+        switchFragment(centerFragment, centerFragment.getClass().getName());
         String indexMenuStr = PreferenceUtil.getImpl(this).getString(Config.INDEX_MENU_URL, "");
         final IndexMenuInfo indexMenuInfo = JSON.parseObject(indexMenuStr, IndexMenuInfo.class);
         if (indexMenuInfo != null && !TextUtils.isEmpty(indexMenuInfo.getButton_txt())) {
             h5Page.setText(indexMenuInfo.getButton_txt());
+        }
+
+        if (!SharePreferenceUtils.getInstance().getBoolean(Config.index_dialog)) {
+//            final IndexDialogFragment indexDialogFragment = new IndexDialogFragment();
+//            indexDialogFragment.show(getChildFragmentManager(), "");
+            PolicyTintFragment policyTintFragment = new PolicyTintFragment();
+            policyTintFragment.show(getSupportFragmentManager(), "");
+            policyTintFragment.setOnGrantListener(this::requestPermission);
+
+        }
+
+        if (SharePreferenceUtils.getInstance().getBoolean(Config.index_dialog)) {
+
+            TTAdDispatchManager.getManager().init(this, TTAdType.BANNER, bottomContainer, Config.TOUTIAO_BANNER_ID, 0, "", 0, "", 0, this);
         }
 
         FragmentAdapter mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
@@ -161,28 +191,28 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         RxView.clicks(mIndexBtn).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                mViewPager.setCurrentItem(0);
+                setCurrent(0);
             }
         });
 
         RxView.clicks(mLearnBtn).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                mViewPager.setCurrentItem(1);
+                setCurrent(1);
             }
         });
 
         RxView.clicks(mReadTomeBtn).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                mViewPager.setCurrentItem(2);
+                setCurrent(2);
             }
         });
 
         RxView.clicks(mPhonicsBtn).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                mViewPager.setCurrentItem(3);
+                setCurrent(3);
             }
         });
 
@@ -200,11 +230,14 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         });
 
         RxView.clicks(mCenterBtn).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+
             @Override
             public void call(Void aVoid) {
-                PayPopupWindow payPopupWindow = new PayPopupWindow(MainActivity.this);
-
-                payPopupWindow.show();
+                mViewPager.setVisibility(View.GONE);
+                mainContainer.setVisibility(View.VISIBLE);
+//                PayPopupWindow payPopupWindow = new PayPopupWindow(MainActivity.this);
+//
+//                payPopupWindow.show();
             }
         });
         RxView.clicks(rlH5Page).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
@@ -220,7 +253,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         });
 
 
-        requestPermission();
+//        requestPermission();
 
         App.getApp().getLoginInfo(new Runnable() {
             @Override
@@ -228,6 +261,13 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                 LogUtil.msg("初始化数据完成--->");
             }
         });
+    }
+
+
+    private void setCurrent(int index) {
+        mViewPager.setVisibility(View.VISIBLE);
+        mainContainer.setVisibility(View.GONE);
+        mViewPager.setCurrentItem(index);
     }
 
     @Override
@@ -281,8 +321,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     }
 
 
-
-
     private void reset() {
         mIndexBtn.setSelected(false);
         mLearnBtn.setSelected(false);
@@ -290,11 +328,42 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         mPhonicsBtn.setSelected(false);
     }
 
+    public void switchFragment(Fragment fragment, String tag) {
+        FragmentTransaction bt = getSupportFragmentManager().beginTransaction();
+        bt.replace(R.id.main_container, fragment);
+
+        bt.addToBackStack(tag);
+        bt.commit();
+    }
+
+    public void popFragment() {
+        getSupportFragmentManager().popBackStack();
+    }
 
     private IndexFragment mIndexFragment;
     private LearnPhonogramFragment mLearnPhonogramFragment;
     private ReadToMeFragment mReadToMeFragment;
     private PhonicsFragments mPhonicsFragments;
+
+    @Override
+    public void loadSuccess() {
+
+    }
+
+    @Override
+    public void loadFailed() {
+
+    }
+
+    @Override
+    public void clickAD() {
+
+    }
+
+    @Override
+    public void onTTNativeExpressed(List<TTNativeExpressAd> ads) {
+
+    }
 
 
     class FragmentAdapter extends FragmentStatePagerAdapter {
@@ -367,25 +436,30 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
             }
         });
 
-        new PhonogramEngin(this).getPhonogramList().subscribe(new Action1<ResultInfo<PhonogramListInfo>>() {
+        new PhonographEngine(this).getPhonogramList().subscribe(new BaseCommonObserver<PhonogramListInfo>(this) {
             @Override
-            public void call(final ResultInfo<PhonogramListInfo> phonogramListInfoResultInfo) {
-                if (phonogramListInfoResultInfo != null) {
-                    if (phonogramListInfoResultInfo.code == HttpConfig.STATUS_OK && phonogramListInfoResultInfo.data !=
-                            null && phonogramListInfoResultInfo.data.getPhonogramInfos() != null &&
-                            phonogramListInfoResultInfo.data.getPhonogramInfos().size() > 0) {
-                        showInfo(phonogramListInfoResultInfo.data);
-                        TaskUtil.getImpl().runTask(new Runnable() {
-                            @Override
-                            public void run() {
-                                PreferenceUtil.getImpl(getApplicationContext()).putString(Config.PHONOGRAM_LIST_URL, JSON.toJSONString
-                                        (phonogramListInfoResultInfo.data));
-                            }
-                        });
-                    }
-                } else {
-                    ToastUtil.toast2(MainActivity.this,"数据异常,请检查网络后重启应用");
+            public void onSuccess(final PhonogramListInfo data, String message) {
+
+                if (data != null && data.getPhonogramInfos() != null && data.getPhonogramInfos().size() > 0) {
+                    showInfo(data);
+                    TaskUtil.getImpl().runTask(new Runnable() {
+                        @Override
+                        public void run() {
+                            PreferenceUtil.getImpl(getApplicationContext()).putString(Config.PHONOGRAM_LIST_URL, JSON.toJSONString(data));
+                        }
+                    });
                 }
+
+            }
+
+            @Override
+            public void onFailure(int code, String errorMsg) {
+                ToastUtil.toast(MainActivity.this, "数据异常,请检查网络后重启应用");
+            }
+
+            @Override
+            public void onRequestComplete() {
+
             }
         });
     }
@@ -451,18 +525,17 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         }
 
         if (!flag) {
-            LoginDataInfo loginDataInfo = App.getApp().getLoginDataInfo();
-            if (loginDataInfo != null) {
-                List<VipInfo> vipInfoList = loginDataInfo.getVipInfoList();
-                if (vipInfoList != null) {
-                    for (VipInfo vipInfo : vipInfoList) {
-                        if (vip.equals(vipInfo.getType() + "")) {
-                            flag = true;
-                            break;
-                        }
+
+            List<VipInfo> vipInfoList = UserInfoHelper.getVipInfos();
+            if (vipInfoList != null) {
+                for (VipInfo vipInfo : vipInfoList) {
+                    if (vip.equals(vipInfo.getType() + "")) {
+                        flag = true;
+                        break;
                     }
                 }
             }
+
         }
         return flag;
     }

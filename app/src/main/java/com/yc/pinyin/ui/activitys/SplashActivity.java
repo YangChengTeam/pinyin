@@ -15,6 +15,7 @@ import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.qq.e.ads.nativ.NativeExpressADView;
 import com.yc.pinyin.R;
 import com.yc.pinyin.domain.Config;
+import com.yc.pinyin.helper.SharePreferenceUtils;
 import com.yc.pinyin.utils.Mp3Utils;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -62,10 +64,14 @@ public class SplashActivity extends BaseActivity implements OnAdvStateListener, 
         splashContainer = findViewById(R.id.splash_container);
         reTryLayout = findViewById(R.id.retry_layout);
 
-        if (Build.BRAND.toUpperCase().equals("HUAWEI") || Build.BRAND.toUpperCase().equals("HONOR")) {
-            AdvDispatchManager.getManager().init(this, AdvType.SPLASH, splashContainer, skipView, Config.AV_APPID, Config.AV_SPLASH_ID, this);
-        } else {
-            TTAdDispatchManager.getManager().init(this, TTAdType.SPLASH, splashContainer, Config.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, this);
+        if (SharePreferenceUtils.getInstance().getBoolean(Config.index_dialog))
+            if (Build.BRAND.toUpperCase().equals("HUAWEI") || Build.BRAND.toUpperCase().equals("HONOR")) {
+                AdvDispatchManager.getManager().init(this, AdvType.SPLASH, splashContainer, skipView, Config.AV_APPID, Config.AV_SPLASH_ID, this);
+            } else {
+                TTAdDispatchManager.getManager().init(this, TTAdType.SPLASH, splashContainer, Config.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, this);
+            }
+        else {
+            switchMain(2000);
         }
         final Integer[] bgIDs = new Integer[]{R.mipmap.splash_bg1, R.mipmap.splash_bg2, R.mipmap.splash_bg3, R.mipmap
                 .splash_bg4};
@@ -86,6 +92,7 @@ public class SplashActivity extends BaseActivity implements OnAdvStateListener, 
                     subscription.unsubscribe();
                     subscription = null;
                 }
+//                switchMain(1500);
 //                handler.postDelayed(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -95,6 +102,7 @@ public class SplashActivity extends BaseActivity implements OnAdvStateListener, 
 
             }
         });
+        mediaPlayer.start();
     }
 
     @Override

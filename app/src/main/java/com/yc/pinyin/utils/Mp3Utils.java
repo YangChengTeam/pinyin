@@ -5,7 +5,8 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
 
-import com.kk.utils.TaskUtil;
+import yc.com.rthttplibrary.util.TaskUtil;
+
 
 /**
  * Created by zhangkai on 2017/12/18.

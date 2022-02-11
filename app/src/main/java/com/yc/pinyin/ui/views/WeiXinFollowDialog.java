@@ -14,11 +14,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.kk.utils.ToastUtil;
+
 import com.umeng.analytics.MobclickAgent;
 import com.yc.pinyin.R;
 import com.yc.pinyin.utils.CheckUtil;
 import com.yc.pinyin.utils.WeiXinUtil;
+
+import yc.com.rthttplibrary.util.ToastUtil;
 
 public class WeiXinFollowDialog extends Dialog {
 

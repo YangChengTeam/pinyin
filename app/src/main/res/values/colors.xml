@@ -18,4 +18,6 @@
     <color name="weixin_line_color">#c1c1c1c1</color>
     <color name="gray_eee">#EEEEEE</color>
     <color name="orange_fbc927">#FBC927</color>
+    <color name="vip_title_color">#b05739</color>
+    <color name="gray_999">#999</color>
 </resources>

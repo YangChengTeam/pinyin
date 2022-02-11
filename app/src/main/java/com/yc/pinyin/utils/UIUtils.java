@@ -1,9 +1,13 @@
 package com.yc.pinyin.utils;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+
+import com.yc.pinyin.App;
 
 /**
  * Created by zhangkai on 2017/12/21.
@@ -34,5 +38,16 @@ public class UIUtils {
             }
         } catch (Exception e) {
         }
+    }
+
+    public static String getVersion() {
+        PackageManager manager = App.getApp().getPackageManager();
+        try {
+            PackageInfo packageInfo = manager.getPackageInfo(App.getApp().getPackageName(), 0);
+            return packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

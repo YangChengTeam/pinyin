@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding.view.RxView;
 import com.kk.loading.LoadingDialog;
 import com.kk.share.UMShareImpl;
-import com.kk.utils.ToastUtil;
+
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.yc.pinyin.App;
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import rx.functions.Action1;
+import yc.com.rthttplibrary.util.ToastUtil;
 
 /**
  * Created by zhangkai on 2017/12/15.

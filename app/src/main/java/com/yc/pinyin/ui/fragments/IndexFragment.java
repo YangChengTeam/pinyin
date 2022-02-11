@@ -8,8 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding.view.RxView;
-import com.kk.utils.LogUtil;
-import com.kk.utils.ToastUtil;
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
 import com.liulishuo.filedownloader.FileDownloader;
@@ -19,6 +17,7 @@ import com.yc.pinyin.R;
 import com.yc.pinyin.domain.Config;
 import com.yc.pinyin.domain.LoginDataInfo;
 import com.yc.pinyin.helper.SharePreferenceUtils;
+import com.yc.pinyin.helper.UserInfoHelper;
 import com.yc.pinyin.ui.views.MainBgView;
 import com.yc.pinyin.utils.LPUtils;
 
@@ -27,6 +26,8 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.core.content.FileProvider;
 import rx.functions.Action1;
+import yc.com.rthttplibrary.util.LogUtil;
+import yc.com.rthttplibrary.util.ToastUtil;
 
 /**
  * Created by zhangkai on 2017/12/15.
@@ -49,11 +50,7 @@ public class IndexFragment extends BaseFragment {
         FileDownloader.setup(getActivity());
 
 
-        if (!SharePreferenceUtils.getInstance().getBoolean(Config.index_dialog)) {
-            final IndexDialogFragment indexDialogFragment = new IndexDialogFragment();
-            indexDialogFragment.show(getChildFragmentManager(), "");
 
-        }
 
         mainBgView = (MainBgView) getView(R.id.mainBgView);
         mainBgView.showInnerBg();
@@ -62,7 +59,9 @@ public class IndexFragment extends BaseFragment {
 
         LoginDataInfo loginDataInfo = App.getApp().getLoginDataInfo();
         if (loginDataInfo != null && loginDataInfo.getStatusInfo() != null) {
-            ((TextView) getView(R.id.tv_user)).setText("用户ID: PY" + loginDataInfo.getStatusInfo().getUid());
+            String uid = UserInfoHelper.getUid();
+            if (TextUtils.isEmpty(uid)) uid = loginDataInfo.getStatusInfo().getUid();
+            ((TextView) getView(R.id.tv_user)).setText("用户ID: PY" + uid);
         }
 
         RxView.clicks(ivDownEnglish).throttleFirst(200, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {

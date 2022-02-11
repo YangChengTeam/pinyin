@@ -77,8 +77,8 @@ public class UMShareImpl extends IShare {
         public void build(Context context) {
             PlatformConfig.setWeixin(wxappid, wxappsecert);
             PlatformConfig.setQQZone(qqappid, qqappsecert);
-            PlatformConfig.setSinaWeibo(wbappid, wbappsecert, "http://sns.whalecloud.com");
-            Config.DEBUG = debug;
+//            PlatformConfig.setSinaWeibo(wbappid, wbappsecert, "http://sns.whalecloud.com");
+//            Config.DEBUG = debug;
             UMShareAPI.get(context);
         }
 

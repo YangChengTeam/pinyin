@@ -3,6 +3,7 @@ package com.yc.pinyin.ui.fragments;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -10,16 +11,13 @@ import android.widget.ProgressBar;
 
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.jakewharton.rxbinding.view.RxView;
-import com.kk.utils.LogUtil;
-import com.kk.utils.ToastUtil;
-import com.ksyun.media.player.IMediaPlayer;
-import com.ksyun.media.player.KSYMediaPlayer;
 import com.yc.pinyin.App;
 import com.yc.pinyin.R;
 import com.yc.pinyin.adapter.ReadItemPagerAdapter;
 import com.yc.pinyin.domain.PhonogramInfo;
 import com.yc.pinyin.domain.PhonogramListInfo;
 import com.yc.pinyin.helper.SeekBarHelper;
+import com.yc.pinyin.helper.UserInfoHelper;
 import com.yc.pinyin.ui.activitys.MainActivity;
 import com.yc.pinyin.ui.popupwindow.PayPopupWindow;
 import com.yc.pinyin.ui.views.MainBgView;
@@ -42,6 +40,8 @@ import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
+import yc.com.rthttplibrary.util.LogUtil;
+import yc.com.rthttplibrary.util.ToastUtil;
 
 /**
  * Created by zhangkai on 2017/12/15.
@@ -73,7 +73,7 @@ public class ReadToMeFragment extends BaseFragment {
 
     private StrokeTextView mCurrentNumberTextView;
 
-    private KSYMediaPlayer ksyMediaPlayer;
+    private MediaPlayer ksyMediaPlayer;
 
     private boolean isPlay;
 
@@ -136,7 +136,7 @@ public class ReadToMeFragment extends BaseFragment {
         mCurrentNumberTextView = (StrokeTextView) getView(R.id.tv_current_number);
 
         if (ksyMediaPlayer == null) {
-            ksyMediaPlayer = new KSYMediaPlayer.Builder(getActivity()).build();
+            ksyMediaPlayer = new MediaPlayer();
         }
 
         mainBgView.showInnerBg();
@@ -157,9 +157,9 @@ public class ReadToMeFragment extends BaseFragment {
         });
 
         //音频装载完成
-        ksyMediaPlayer.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
+        ksyMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
-            public void onPrepared(IMediaPlayer mp) {
+            public void onPrepared(MediaPlayer mp) {
                 mReadPlayImageView.setClickable(true);
                 mReadPlayImageView.setImageResource(R.drawable.read_play_selector);
                 play();
@@ -168,9 +168,9 @@ public class ReadToMeFragment extends BaseFragment {
         });
 
         //音频播放完成
-        ksyMediaPlayer.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
+        ksyMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
-            public void onCompletion(IMediaPlayer mp) {
+            public void onCompletion(MediaPlayer mp) {
 
                 if (playStep == 1) {
                     requestPlay();
@@ -208,11 +208,11 @@ public class ReadToMeFragment extends BaseFragment {
                 }
             }
         });
-        ksyMediaPlayer.setOnErrorListener(new IMediaPlayer.OnErrorListener() {
+        ksyMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
-            public boolean onError(IMediaPlayer mp, int what, int extra) {
+            public boolean onError(MediaPlayer mp, int what, int extra) {
                 mReadPlayImageView.setClickable(true);
-                ToastUtil.toast(getActivity(), "播放错误，请稍后重试");
+//                ToastUtil.toast(getActivity(), "播放错误，请稍后重试");
                 MainActivity.getMainActivity().requestPermission();
                 return false;
             }
@@ -379,17 +379,21 @@ public class ReadToMeFragment extends BaseFragment {
             if (!App.isTrial) {
                 mainBgView.setIndex(2);
                 viewPager.setCurrentItem(2, false);
-                PayPopupWindow payPopupWindow = new PayPopupWindow(MainActivity.getMainActivity());
+                if (UserInfoHelper.isLogin(getActivity())) {
+                    PayPopupWindow payPopupWindow = new PayPopupWindow(MainActivity.getMainActivity());
 //                payPopupWindow.setTimeListener(MainActivity.getMainActivity());
-                payPopupWindow.show();
+                    payPopupWindow.show();
+                }
                 return;
             }
 
             if (position >= 8 && !MainActivity.getMainActivity().isPhonogramVip()) {
                 mainBgView.setIndex(7);
                 viewPager.setCurrentItem(7, false);
-                PayPopupWindow payPopupWindow = new PayPopupWindow(MainActivity.getMainActivity());
-                payPopupWindow.show();
+                if (UserInfoHelper.isLogin(getActivity())) {
+                    PayPopupWindow payPopupWindow = new PayPopupWindow(MainActivity.getMainActivity());
+                    payPopupWindow.show();
+                }
                 return;
             }
         }
@@ -460,7 +464,7 @@ public class ReadToMeFragment extends BaseFragment {
     public void loadUserVoice() {
 
         if (ksyMediaPlayer == null) {
-            ksyMediaPlayer = new KSYMediaPlayer.Builder(getActivity()).build();
+            ksyMediaPlayer = new MediaPlayer();
             ksyMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         }
 
@@ -585,17 +589,21 @@ public class ReadToMeFragment extends BaseFragment {
             if (!App.isTrial) {
                 mainBgView.setIndex(2);
                 viewPager.setCurrentItem(2, false);
-                PayPopupWindow payPopupWindow = new PayPopupWindow(MainActivity.getMainActivity());
+                if (UserInfoHelper.isLogin(getActivity())) {
+                    PayPopupWindow payPopupWindow = new PayPopupWindow(MainActivity.getMainActivity());
 //                payPopupWindow.setTimeListener(MainActivity.getMainActivity());
-                payPopupWindow.show();
+                    payPopupWindow.show();
+                }
                 return;
             }
 
             if (position >= 8 && !MainActivity.getMainActivity().isPhonogramVip()) {
                 mainBgView.setIndex(7);
                 viewPager.setCurrentItem(7, false);
-                PayPopupWindow payPopupWindow = new PayPopupWindow(MainActivity.getMainActivity());
-                payPopupWindow.show();
+                if (UserInfoHelper.isLogin(getActivity())) {
+                    PayPopupWindow payPopupWindow = new PayPopupWindow(MainActivity.getMainActivity());
+                    payPopupWindow.show();
+                }
                 return;
 
             }

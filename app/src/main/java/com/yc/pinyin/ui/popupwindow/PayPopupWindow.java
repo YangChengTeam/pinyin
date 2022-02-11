@@ -11,18 +11,12 @@ import android.widget.ImageView;
 import com.alibaba.fastjson.JSON;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jakewharton.rxbinding.view.RxView;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
-import com.kk.utils.LogUtil;
-import com.kk.utils.PreferenceUtil;
-import com.kk.utils.ScreenUtil;
-import com.kk.utils.TaskUtil;
-import com.kk.utils.ToastUtil;
 import com.yc.pinyin.R;
 import com.yc.pinyin.domain.Config;
 import com.yc.pinyin.domain.GoodInfo;
 import com.yc.pinyin.domain.GoodListInfo;
-import com.yc.pinyin.engin.GoodEngin;
+import com.yc.pinyin.engin.GoodEngine;
+import com.yc.pinyin.observer.BaseCommonObserver;
 import com.yc.pinyin.pay.I1PayAbs;
 import com.yc.pinyin.pay.IPayAbs;
 import com.yc.pinyin.pay.IPayCallback;
@@ -38,6 +32,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import rx.functions.Action1;
+import yc.com.rthttplibrary.config.HttpConfig;
+import yc.com.rthttplibrary.util.LogUtil;
+import yc.com.rthttplibrary.util.PreferenceUtil;
+import yc.com.rthttplibrary.util.ScreenUtil;
+import yc.com.rthttplibrary.util.TaskUtil;
+import yc.com.rthttplibrary.util.ToastUtil;
 
 /**
  * Created by zhangkai on 2017/12/15.
@@ -56,7 +56,7 @@ public class PayPopupWindow extends BasePopupWindow {
     private final String WX_PAY = "wxpay";
     private final String ALI_PAY = "alipay";
     private String payway = WX_PAY;
-    private GoodEngin goodEngin;
+    private GoodEngine goodEngin;
 
     private GoodInfo goodInfo;
 
@@ -72,7 +72,7 @@ public class PayPopupWindow extends BasePopupWindow {
 
     @Override
     public void init() {
-        goodEngin = new GoodEngin(mContext);
+        goodEngin = new GoodEngine(mContext);
         setAnimationStyle(R.style.popwindow_style);
         initData();
         mIvPayCharge = (ImageButton) getView(R.id.iv_pay_charge);
@@ -123,23 +123,38 @@ public class PayPopupWindow extends BasePopupWindow {
                 }
             }
         });
-        goodEngin.getGoodList().subscribe(new Action1<ResultInfo<GoodListInfo>>() {
+        goodEngin.getGoodList().subscribe(new BaseCommonObserver<GoodListInfo>(mContext) {
             @Override
-            public void call(final ResultInfo<GoodListInfo> goodListInfoResultInfo) {
-                if (goodListInfoResultInfo != null && goodListInfoResultInfo.code == HttpConfig.STATUS_OK
-                        && goodListInfoResultInfo.data != null && goodListInfoResultInfo.data.getGoodInfoList() != null) {
-                    payWayInfoAdapter.setNewData(goodListInfoResultInfo.data.getGoodInfoList());
-                    goodInfo = getGoodInfo(goodListInfoResultInfo.data.getGoodInfoList());
+            public void onSuccess(final GoodListInfo data, String message) {
+                if (data != null && data.getGoodInfoList() != null) {
+                    payWayInfoAdapter.setNewData(data.getGoodInfoList());
+                    goodInfo = getGoodInfo(data.getGoodInfoList());
                 }
                 TaskUtil.getImpl().runTask(new Runnable() {
                     @Override
                     public void run() {
-                        if (goodListInfoResultInfo != null)
-                            PreferenceUtil.getImpl(mContext).putString(Config.VIP_LIST_URL, JSON.toJSONString(goodListInfoResultInfo.data));
+                        if (data != null)
+                            PreferenceUtil.getImpl(mContext).putString(Config.VIP_LIST_URL, JSON.toJSONString(data));
                     }
                 });
             }
+
+            @Override
+            public void onFailure(int code, String errorMsg) {
+
+            }
+
+            @Override
+            public void onRequestComplete() {
+
+            }
         });
+//        goodEngin.getGoodList().subscribe(new Action1<ResultInfo<GoodListInfo>>() {
+//            @Override
+//            public void call(final ResultInfo<GoodListInfo> goodListInfoResultInfo) {
+//
+//            }
+//        });
     }
 
 
@@ -176,7 +191,7 @@ public class PayPopupWindow extends BasePopupWindow {
                     return;
                 }
                 if (goodInfo != null) {
-                    OrderParamsInfo orderParamsInfo = new OrderParamsInfo(Config.ORDER_URL, String.valueOf(goodInfo.getId()), "0", Float.parseFloat(goodInfo.getReal_price()), goodInfo.getTitle());
+                    OrderParamsInfo orderParamsInfo = new OrderParamsInfo(String.valueOf(goodInfo.getId()), "0", Float.parseFloat(goodInfo.getReal_price()), goodInfo.getTitle());
                     orderParamsInfo.setPayway_name(payway);
 
                     iPayAbs.pay(orderParamsInfo, new IPayCallback() {
